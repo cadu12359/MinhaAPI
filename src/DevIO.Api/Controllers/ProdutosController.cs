@@ -82,8 +82,9 @@ namespace DevIO.Api.Controllers
             }
 
             var imageDataByteArray = Convert.FromBase64String(arquivo);
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/imagens", imgNome);
+            var current = Directory.GetCurrentDirectory();
+            var parent = Directory.GetParent("../../");
+            var filePath = Path.Combine(parent.FullName, "app/demo-webapi/src/assets/", imgNome);
 
             if (System.IO.File.Exists(filePath))
             {

@@ -29,7 +29,7 @@ namespace DevIO.Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<MeuDbContext>(options => 
+            services.AddDbContext<MeuDbContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
@@ -41,8 +41,17 @@ namespace DevIO.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "DevIO.Api", Version = "v1" });
             });
 
-            services.Configure<ApiBehaviorOptions>(options => {
+            services.Configure<ApiBehaviorOptions>(options =>
+            {
                 options.SuppressModelStateInvalidFilter = true;
+            });
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("Development",
+                    builder => builder.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader());
             });
 
             services.ResolveDependencies();
@@ -57,6 +66,8 @@ namespace DevIO.Api
                 app.UseSwagger();
                 app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "DevIO.Api v1"));
             }
+
+            app.UseCors("Development");
 
             app.UseHttpsRedirection();
 
