@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace DevIO.Api.Controllers
 {
-    [Route("api/{controller}")]
+    [Route("api/produtos")]
     public class ProdutosController : MainController
     {
         private readonly IProdutoRepository _produtoRepository;
@@ -30,7 +30,7 @@ namespace DevIO.Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IEnumerable<ProdutoViewModel>> ObterTodos()
+        public async Task<IEnumerable<ProdutoViewModel>> ObterTodosProdutos()
         {
             return _mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutosFornecedores());
         }

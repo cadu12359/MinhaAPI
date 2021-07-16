@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DevIO.Api.Controllers
 {
-    [Route("api/{controller}")]
+    [Route("api/fornecedores")]
     public class FornecedoresController : MainController
     {
         private readonly IFornecedorRepository _fornecedorRepository;
@@ -103,11 +103,13 @@ namespace DevIO.Api.Controllers
             return CustomResponse(enderecoViewModel);
         }
 
+        [HttpGet("ObterFornecedorProdutosEndereco/{id:guid}")]
         public async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid id)
         {
             return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
         }
 
+        [HttpGet("ObterFornecedorEndereco/{id:guid}")]
         public async Task<FornecedorViewModel> ObterFornecedorEndereco(Guid id)
         {
             return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
