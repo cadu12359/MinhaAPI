@@ -34,6 +34,8 @@ namespace DevIO.Api
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
+            services.AddIdentityConfiguration(Configuration);
+
             services.AddAutoMapper(typeof(Startup));
             services.AddControllers();
             services.AddSwaggerGen(c =>
@@ -57,6 +59,7 @@ namespace DevIO.Api
             }
 
             app.UseApiConfig(env);
+            app.UseAuthentication();
 
             app.UseRouting();
 
