@@ -13,16 +13,28 @@ namespace DevIO.Api.Controllers
     [ApiController]
     public abstract class MainController : ControllerBase
     {
-        private readonly INotificador _inotificador;
+        private readonly INotificador _notificador;
+        public readonly IUser AppUser;
 
-        public MainController(INotificador notificador)
+        protected Guid UsuarioId { get; set; }
+        protected bool UsuarioAutenticado { get; set; }
+
+        protected MainController(INotificador notificador,
+                                 IUser appUser)
         {
-            _inotificador = notificador;
+            _notificador = notificador;
+            AppUser = appUser;
+
+            if (appUser.IsAuthenticated())
+            {
+                UsuarioId = appUser.GetUserId();
+                UsuarioAutenticado = true;
+            }
         }
 
         protected bool OperacaoValida()
         {
-            return !_inotificador.TemNotificacao();
+            return !_notificador.TemNotificacao();
         }
 
         protected ActionResult CustomResponse(object result = null)
@@ -39,7 +51,7 @@ namespace DevIO.Api.Controllers
             return BadRequest(new
             {
                 success = false,
-                errors = _inotificador.ObterNotificacoes().Select(n => n.Mensagem)
+                errors = _notificador.ObterNotificacoes().Select(n => n.Mensagem)
             });
         }
 
@@ -61,7 +73,7 @@ namespace DevIO.Api.Controllers
 
         protected void NotificarErro(string mensagem)
         {
-            _inotificador.Handle(new Notificacao(mensagem));
+            _notificador.Handle(new Notificacao(mensagem));
         }
     }
 }
